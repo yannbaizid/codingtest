@@ -22,23 +22,23 @@ public class Test {
 	private static Set<String> productIdList = new HashSet<String>();
 
 	public final static void main(String[] args) {
-		Map<String, Product> products=new Hashtable<String, Product>();
+		Map<String, Product> products = new Hashtable<String, Product>();
 
 		DataProvider provider = DataProviderFactory.getDataProvider();
 		provider.addMarketDataListener(new MarketDataListener() {
 			public void transactionOccured(String productId, long quantity, double price) {
-			if (!products.containsKey(productId)) {
-				products.put(productId, new Product(productId));
-			}
-			
-				Product product=products.get(productId);
-				
-				product.addTransaction(new Transaction(quantity, price));
-			
-				if(product.compareValues() && productId.equals("TEST_PRODUCT")) {
-					logger.info("VWAP "+product.getVwap()+") > FairValue ("+product.getFairValue()+")");
+				if (!products.containsKey(productId)) {
+					products.put(productId, new Product(productId));
 				}
-				
+
+				Product product = products.get(productId);
+
+				product.addTransaction(new Transaction(quantity, price));
+
+				if (product.compareValues() && productId.equals("TEST_PRODUCT")) {
+					logger.info("VWAP " + product.getVwap() + ") > FairValue (" + product.getFairValue() + ")");
+				}
+
 			}
 		});
 		provider.addPricingDataListener(new PricingDataListener() {
@@ -46,11 +46,12 @@ public class Test {
 				if (!products.containsKey(productId)) {
 					products.put(productId, new Product(productId));
 				}
-				Product product=products.get(productId);
+				Product product = products.get(productId);
 				products.get(productId).setFairValue(fairValue);
-				if(product.compareValues() && productId.equals("TEST_PRODUCT")) {
-					logger.info("VWAP "+product.getVwap()+") > FairValue ("+product.getFairValue()+")");
-				};
+				if (product.compareValues() && productId.equals("TEST_PRODUCT")) {
+					logger.info("VWAP " + product.getVwap() + ") > FairValue (" + product.getFairValue() + ")");
+				}
+				;
 			}
 		});
 
