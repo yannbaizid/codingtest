@@ -17,10 +17,6 @@ public class Transaction {
 		return price;
 	}
 
-	@Override
-	public String toString() {
-		return "Transaction [quantity=" + quantity + ", price=" + price + "]";
-	}
 	
 	
 }

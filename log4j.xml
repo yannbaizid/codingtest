@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE log4j:configuration SYSTEM  "https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
-<log4j:configuration debug="false" xmlns:log4j="http://jakarta.apache.org/log4j/">
-	<appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+<log4j:configuration debug="false"
+	xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="ConsoleAppender"
+		class="org.apache.log4j.ConsoleAppender">
+		<param name="threshold" value="INFO" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{dd-MM-yyyy HH:mm:ss,SSS} [%-5p] [%t] %c.%M (%L): %m\n"/>
+			<param name="ConversionPattern"
+				value="%d{dd-MM-yyyy HH:mm:ss,SSS}: %m\n" />
+				
+		</layout>
+	</appender>
+	<appender name="FileAppender"
+		class="org.apache.log4j.FileAppender">
+		<param name="file" value="./log/log.log" />
+		<param name="append" value="false" />
+		
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{dd-MM-yyyy HH:mm:ss,SSS} [%-5p] [%t] %c.%M (%L): %m\n" />
 		</layout>
 	</appender>
 
+	
 	<logger name="TEST_PRODUCT">
 		<level value="DEBUG" />
-	</logger> 
+	</logger>
 	<root>
-		<priority value="info"/>
-    	<appender-ref ref="ConsoleAppender"/>
-	</root> 
+		<priority value="debug" />
+		<appender-ref ref="ConsoleAppender" />
+		<appender-ref ref="FileAppender" />
 	
+	</root>
+
 </log4j:configuration>

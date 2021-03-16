@@ -40,42 +40,19 @@ public class Product {
 		return this.vwap;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((productId == null) ? 0 : productId.hashCode());
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Product other = (Product) obj;
-		if (productId == null) {
-			if (other.productId != null)
-				return false;
-		} else if (!productId.equals(other.productId))
-			return false;
-		return true;
-	}
 
-	@Override
-	public String toString() {
-		return "Product [productId=" + productId + ", fairValue=" + fairValue + ", vwap=" + vwap + ",occurence="
-				+ this.occurence + "]";
-	}
 
-	public synchronized int increment() {
-		return this.occurence++;
-	}
 
-	public synchronized void addTransaction(Transaction transaction) {
+	/**
+	 * Add transaction to lastTransactions list.
+	 * If more than 5 transactions, drops the older one.
+	 * Then update vwap and compare values.
+	 * 
+	 * @param transaction Transaction
+	 * @return boolean true if updated vwap >fairvalue
+	 */
+	public synchronized boolean addTransaction(Transaction transaction) {
 		this.latestTransactions.add(transaction);
 		if (this.latestTransactions.size() > 5) {
 			this.latestTransactions.remove(0);
@@ -83,26 +60,31 @@ public class Product {
 		}
 
 		this.setVwap();
+		return this.compareValues();
 	}
 
+	/**
+	 *  Calculates Vwap based on lastTransactions list.
+	 *  
+	 * @return updated vwap : double
+	 */
 	public synchronized double setVwap() {
-		double totalPrice = 0;
-		long totalVolume = 0;
-		
-		for (int i = 0; i < this.latestTransactions.size(); i++) {
-			Transaction transaction = this.latestTransactions.get(i);
-			totalPrice += transaction.getPrice() * transaction.getQuantity();
-			totalVolume += transaction.getQuantity();
-		}
+	
+		double totalPrice = this.latestTransactions.stream()
+				.mapToDouble(transaction -> transaction.getQuantity() * transaction.getPrice()).sum();
+		long totalVolume = this.latestTransactions.stream().mapToLong(transaction -> transaction.getQuantity()).sum();
 
 		this.vwap = totalVolume != 0 ? totalPrice / totalVolume : 0;
-		
 
-		
 		return this.vwap;
-		
+
 	}
 
+	/**
+	 * Compare vwap and fair value
+	 * @return true if vwap > fairvalue
+	 * 
+	 */
 	public synchronized boolean compareValues() {
 
 		return this.vwap != 0 ? this.vwap > this.fairValue : false;
