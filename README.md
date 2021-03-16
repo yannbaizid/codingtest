@@ -7,7 +7,7 @@ On console, only results for product "TEST-PRODUCT" are displayed, to facilitate
 
 On log file, all logs are saved.
 
-
+*****************************
 
 Addition :
 Classes: Product, Transaction and ProductManager.
