@@ -9,18 +9,17 @@ public class Product {
 	private double fairValue;
 	private List<Transaction> latestTransactions;
 	private double vwap;
-	private int occurence;
+
 
 	public Product(String productId) {
-		this(productId, 0, new ArrayList<Transaction>(), 1);
+		this(productId, 0, new ArrayList<Transaction>());
 	}
 
-	public Product(String productId, double fairValue, List<Transaction> latestTransactions, int occurence) {
+	public Product(String productId, double fairValue, List<Transaction> latestTransactions) {
 		super();
 		this.productId = productId;
 		this.fairValue = fairValue;
 		this.latestTransactions = latestTransactions;
-		this.occurence = occurence;
 	}
 
 	public String getProductId() {
